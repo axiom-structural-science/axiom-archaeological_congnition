@@ -1,20 +1,28 @@
-| Axiom-Shape | Axiom-Meanings | All Letters with IPA Sound(s) | Cross-field Meaning (Physics, AI, ‎Biology) |‎
-‎| :---: | :---: | :---: | :---: |‎
-‎| **│ (Vertical line)** | **Initiation / Emergence / Point of Origin** | $\text{[ʔ], /ʔa.lif/, [aː], [a], [ɑ], ‎‎[eɪ̯], (ʔā)}$ | **Singularity, spontaneous emergence (Big Bang, initial conditions)** |‎
-‎| — (Horizontal line) | Containment / Housing / Encapsulation | [b], [t], [θ], [ṯā], [p] | Boundary, ‎membrane formation (cell membranes, event horizons) |‎
-‎| ┼ (Cross) | Life-Energy / Vital Circulation / Raw Force | [d͡ʒ], [ʒ], [ħ], [x], [χ], [t͡ʃ] | Vital flow, energy ‎circulation (respiratory systems, feedback loops) |‎
-‎| ┌ (Upper left corner) | Manifestation / Form / Container | [m], /ɛm/ | Materialization, reservoir with ‎flow (vesicles, bounded systems) |‎
-‎| └ (Lower left corner) | Encircling / Domain / Enclosure | [q], /ˈkjuː/, kew, kue, que | Domain ‎boundaries, anchoring points (quantum state, territorial limits) |‎
-‎| ┐ (Upper right corner) | Output / Emission / Expression | [f], [v], /fa/, [pʰa], /f/, [pʰ], [(p)f] | ‎Radiation, release, system output (photon emission, data output) |‎
-‎| **┘ (Lower right corner)** | **Continuity / Looping / Extension** | **[w], [uː], [o:], [əʊ], [oʊ], [u], ‎‎[o]** | **Coupling, system extension, feedback loop** |‎
-‎| **├ (T-junction right)** | **Guidance / Orientation / Navigational Directive** | **[j], [iː], [ja], [e], ‎‎[i]** | **Directional control, guidance, modulation** |‎
-‎| ┤ (T-junction left) | Connection / Linkage / Binding | [l], /ɛl/, [ʎ] | Links, edges, relational bonds ‎‎(graph connections, synapses) |‎
-‎| ┬ (T-junction down) | Solidity / Fortitude / Crystalization | [sˤ], [dˤ] | Structural integrity, ‎crystallization, high-pressure frameworks |‎
-‎| ┴ (T-junction up) | Imprint / Gravity / Pattern Fixation | [tˤ], [ðˤ], /tˤ/ | Anchoring, foundational ‎patterning (gravity, solid-state stability) |‎
-‎| **█ (Rectangle / Process)** | **Processing / Transformation / Inner Mechanics** | **[ʕ], [ɣ], [ɪ], ‎‎[ʊ], [ə], [ɛ], [ʌ]** | **Transformation, hidden processes, transitional state, unknown variable** |‎
-‎| ◆ (Diamond / Decision) | Push / Focus / Force Application | [d] (as in ‘dog’), [ð] (as in ‘/ɛð/edh’) | ‎Linear motion, causality links, direct energy application |‎
-‎| ⌑ (Punch card / Potential) | Potential / Ability / Latent Capacity | [k] (as in ‘king’, [g] (as in ‘game’), [c] ‎‎(as in ‘cup’), /ŋ/ | Stored capacity, encapsulation, grasping (latent variables, containers) |‎
-‎| ⌇ (Magnetic tape / Transfer) | Transfer / Passage / Conveyance | [n] | Movement across layers, ‎signal transfer, conveyance |‎
-‎| ≡ (Document / Synchronization) | Synchronization / Sequential spread / Alignment | [s], [ʃ], [ɕ] | ‎Linear sequences, stream alignment (signal sequencing, workflow control) |‎
-‎| ⌒ (Manual input / Flow) | Flow / Movement / Streaming | [r], [ɾ], [z], /ʒ/, [ɽ] | Oscillatory ‎movement, streaming processes, resonance / vibrations (heartbeat, wave propagation) |‎
-‎| ⟦ ⟧ (Double Bracket) | Identity / Distinction / Selfhood | [h], (‎ـَة, ة‎) | Core identity, distinction, marker ‎of individuality |‎
+def archaeological_axiom_analysis(site_data):
+    """
+    Complete analysis of archaeological sites using AXIOM framework
+    """
+    
+    # 1. Symbol Mapping
+    concepts_detected = map_artifacts_to_concepts(site_data['artifacts'])
+    
+    # 2. Structural Analysis
+    sti_score = calculate_archaeological_sti(concepts_detected, site_data['bp'])
+    
+    # 3. Temporal Positioning
+    era_appropriateness = assess_cognitive_era(concepts_detected, site_data['bp'])
+    
+    # 4. Comparative Analysis
+    regional_context = compare_with_contemporary_sites(site_data)
+    
+    # 5. Confidence Assessment
+    evidence_quality = evaluate_archaeological_evidence(site_data)
+    
+    return {
+        'concepts': concepts_detected,
+        'sti_score': sti_score,
+        'era_appropriateness': era_appropriateness,
+        'regional_context': regional_context,
+        'evidence_quality': evidence_quality,
+        'interpretation_confidence': (sti_score + era_appropriateness + evidence_quality) / 3
+    }
