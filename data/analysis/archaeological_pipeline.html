@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AXIOM Archaeological Analysis Pipeline</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 1000px; margin: 40px auto; padding: 20px; }
+        .pipeline-step { background: #f8f9fa; padding: 20px; margin: 15px 0; border-radius: 8px; border-left: 4px solid #3498db; }
+        .code-block { background: #2c3e50; color: white; padding: 15px; border-radius: 5px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>🏺 AXIOM Archaeological Analysis Pipeline</h1>
+    
+    <div class="pipeline-step">
+        <h3>1. Symbol Mapping</h3>
+        <p>Map archaeological artifacts to AXIOM cognitive concepts</p>
+        <div class="code-block">
+// Example: Bilzingsleben parallel lines → │ Initiation
+function mapArtifactsToConcepts(artifacts) {
+    const mappings = {
+        'parallel lines': '│', 'engraved sequences': '│',
+        'curved lines': '⌒', 'zigzag patterns': '┘',
+        'charred bones': '█', 'fire evidence': '█',
+        'circle enclosures': '—', 'boundary marks': '—',
+        'shell beads': '⟦⟧', 'personal ornaments': '⟦⟧'
+    };
+    // Implementation logic...
+}
+        </div>
+    </div>
+
+    <div class="pipeline-step">
+        <h3>2. Structural Analysis</h3>
+        <p>Calculate STI score for archaeological site cognitive complexity</p>
+        <div class="code-block">
+function calculateArchaeologicalSTI(concepts, siteBP) {
+    // Era-appropriate scoring
+    const expectedConcepts = getConceptsForEra(siteBP);
+    const presentConcepts = concepts.filter(c => expectedConcepts.includes(c));
+    return presentConcepts.length / expectedConcepts.length;
+}
+        </div>
+    </div>
+
+    <div class="pipeline-step">
+        <h3>3. Temporal Positioning</h3>
+        <p>Assess if site's cognitive development matches its era</p>
+        <div class="code-block">
+function assessCognitiveEra(concepts, siteBP) {
+    const latestConcept = Math.max(...concepts.map(c => getConceptEra(c)));
+    const eraAppropriateness = 1 - Math.abs(latestConcept - siteBP) / 100000;
+    return Math.max(0, Math.min(1, eraAppropriateness));
+}
+        </div>
+    </div>
+
+    <div class="pipeline-step">
+        <h3>4. Complete Pipeline Function</h3>
+        <div class="code-block">
+function archaeologicalAXIOMAnalysis(siteData) {
+    const concepts = mapArtifactsToConcepts(siteData.artifacts);
+    const sti = calculateArchaeologicalSTI(concepts, siteData.bp);
+    const eraFit = assessCognitiveEra(concepts, siteData.bp);
+    const evidenceQuality = evaluateEvidence(siteData);
+    
+    return {
+        concepts: concepts,
+        sti_score: sti,
+        era_appropriateness: eraFit,
+        evidence_quality: evidenceQuality,
+        interpretation_confidence: (sti + eraFit + evidenceQuality) / 3
+    };
+}
+        </div>
+    </div>
+</body>
+</html>
