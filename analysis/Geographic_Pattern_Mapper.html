@@ -1,20 +1,233 @@
-// Visualizes concept spread across regions
-function createDiffusionMap(conceptData) {
-  const diffusionPatterns = {};
-  
-  conceptData.forEach(concept => {
-    diffusionPatterns[concept.node] = {
-      origin: concept.earliest_evidence.site,
-      spread_sequence: concept.later_confirmations.map(c => ({
-        site: c.site,
-        bp: c.bp,
-        distance_from_origin: calculateDistance(
-          concept.earliest_evidence.coordinates,
-          getSiteCoordinates(c.site)
-        )
-      })).sort((a, b) => a.bp - b.bp)
-    };
-  });
-  
-  return diffusionPatterns;
-}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AXIOM Geographic Pattern Mapper</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .map-container { height: 600px; border: 1px solid #ccc; margin: 20px 0; }
+        .controls { background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 15px 0; }
+        .concept-legend { display: flex; flex-wrap: wrap; gap: 10px; margin: 10px 0; }
+        .legend-item { display: flex; align-items: center; gap: 5px; }
+        .color-box { width: 20px; height: 20px; border: 1px solid #000; }
+    </style>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+</head>
+<body>
+    <h1>🏺 AXIOM Geographic Pattern Mapper</h1>
+    <p>Visualize the spread of cognitive concepts across regions and time periods</p>
+    
+    <div class="controls">
+        <label>Select Concept: 
+            <select id="conceptSelector">
+                <option value="all">All Concepts</option>
+                <option value="│">│ Initiation</option>
+                <option value="⌒">⌒ Flow</option>
+                <option value="┘">┘ Recurrence</option>
+                <option value="█">█ Processing</option>
+                <option value="—">— Containment</option>
+                <option value="⟦⟧">⟦⟧ Identity</option>
+            </select>
+        </label>
+        <button onclick="loadAndRenderMap()">Generate Map</button>
+    </div>
+
+    <div id="map" class="map-container"></div>
+    <div id="diffusionResults"></div>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        // Sample archaeological data structure (replace with your actual data)
+        const ARCHAEOLOGICAL_DATA = [
+            {
+                node: "│",
+                name: "Initiation",
+                earliest_evidence: {
+                    site: "Bilzingsleben",
+                    coordinates: { lat: 51.27, lng: 11.05 },
+                    bp: 500000
+                },
+                later_confirmations: [
+                    { site: "Trinil", coordinates: { lat: -7.36, lng: 109.95 }, bp: 400000 },
+                    { site: "Zhoukoudian", coordinates: { lat: 39.73, lng: 115.93 }, bp: 300000 },
+                    { site: "Blombos", coordinates: { lat: -34.41, lng: 21.21 }, bp: 100000 }
+                ]
+            },
+            {
+                node: "⌒", 
+                name: "Flow",
+                earliest_evidence: {
+                    site: "Trinil",
+                    coordinates: { lat: -7.36, lng: 109.95 },
+                    bp: 400000
+                },
+                later_confirmations: [
+                    { site: "Berekhat Ram", coordinates: { lat: 33.00, lng: 35.70 }, bp: 400000 },
+                    { site: "Wonderwerk", coordinates: { lat: -27.85, lng: 23.55 }, bp: 200000 }
+                ]
+            }
+        ];
+
+        // Calculate distance between two coordinates (Haversine formula)
+        function calculateDistance(coord1, coord2) {
+            const R = 6371; // Earth's radius in km
+            const dLat = (coord2.lat - coord1.lat) * Math.PI / 180;
+            const dLon = (coord2.lng - coord1.lng) * Math.PI / 180;
+            const a = 
+                Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(coord1.lat * Math.PI / 180) * Math.cos(coord2.lat * Math.PI / 180) * 
+                Math.sin(dLon/2) * Math.sin(dLon/2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            return R * c;
+        }
+
+        // Get coordinates for a site (from your data)
+        function getSiteCoordinates(siteName) {
+            // Search through all data for site coordinates
+            for (const concept of ARCHAEOLOGICAL_DATA) {
+                if (concept.earliest_evidence.site === siteName) {
+                    return concept.earliest_evidence.coordinates;
+                }
+                for (const confirmation of concept.later_confirmations) {
+                    if (confirmation.site === siteName) {
+                        return confirmation.coordinates;
+                    }
+                }
+            }
+            console.warn(`Coordinates not found for site: ${siteName}`);
+            return null;
+        }
+
+        // Main diffusion analysis function (YOUR ORIGINAL CODE - NOW WORKING)
+        function createDiffusionMap(conceptData) {
+            const diffusionPatterns = {};
+            
+            conceptData.forEach(concept => {
+                const validConfirmations = concept.later_confirmations.filter(c => {
+                    const coords = getSiteCoordinates(c.site);
+                    return coords !== null;
+                });
+
+                diffusionPatterns[concept.node] = {
+                    concept: concept.name,
+                    origin: concept.earliest_evidence.site,
+                    origin_coords: concept.earliest_evidence.coordinates,
+                    origin_bp: concept.earliest_evidence.bp,
+                    spread_sequence: validConfirmations.map(c => ({
+                        site: c.site,
+                        bp: c.bp,
+                        coordinates: getSiteCoordinates(c.site),
+                        distance_from_origin: calculateDistance(
+                            concept.earliest_evidence.coordinates,
+                            getSiteCoordinates(c.site)
+                        )
+                    })).sort((a, b) => a.bp - b.bp)
+                };
+            });
+            
+            return diffusionPatterns;
+        }
+
+        // Visualization function
+        function renderDiffusionMap(diffusionPatterns, selectedConcept = 'all') {
+            const map = L.map('map').setView([20, 0], 2);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+
+            const conceptColors = {
+                '│': '#ff0000', '⌒': '#00ff00', '┘': '#0000ff', 
+                '█': '#ff00ff', '—': '#ffff00', '⟦⟧': '#00ffff'
+            };
+
+            let resultsHTML = '<h3>Diffusion Analysis Results</h3>';
+            
+            Object.entries(diffusionPatterns).forEach(([node, data]) => {
+                if (selectedConcept !== 'all' && selectedConcept !== node) return;
+
+                const color = conceptColors[node] || '#888888';
+                
+                // Add origin marker
+                L.circleMarker([data.origin_coords.lat, data.origin_coords.lng], {
+                    color: color,
+                    fillColor: color,
+                    fillOpacity: 0.7,
+                    radius: 8
+                }).addTo(map).bindPopup(`
+                    <strong>${data.concept} (${node})</strong><br>
+                    Origin: ${data.origin}<br>
+                    Date: ${data.origin_bp.toLocaleString()} BP
+                `);
+
+                // Add spread sequence
+                data.spread_sequence.forEach((site, index) => {
+                    L.circleMarker([site.coordinates.lat, site.coordinates.lng], {
+                        color: color,
+                        fillColor: color,
+                        fillOpacity: 0.5,
+                        radius: 6
+                    }).addTo(map).bindPopup(`
+                        <strong>${data.concept}</strong><br>
+                        Site: ${site.site}<br>
+                        Date: ${site.bp.toLocaleString()} BP<br>
+                        Distance from origin: ${site.distance_from_origin.toFixed(0)} km
+                    `);
+
+                    // Draw line from origin to site
+                    L.polyline([
+                        [data.origin_coords.lat, data.origin_coords.lng],
+                        [site.coordinates.lat, site.coordinates.lng]
+                    ], { color: color, weight: 2, opacity: 0.7 }).addTo(map);
+                });
+
+                // Add to results table
+                resultsHTML += `
+                    <div style="margin: 20px 0; padding: 15px; border-left: 4px solid ${color}">
+                        <h4>${data.concept} (${node}) - Origin: ${data.origin}</h4>
+                        <table border="1" style="width: 100%; border-collapse: collapse;">
+                            <tr>
+                                <th>Site</th><th>Date (BP)</th><th>Distance from Origin</th>
+                            </tr>
+                            ${data.spread_sequence.map(site => `
+                                <tr>
+                                    <td>${site.site}</td>
+                                    <td>${site.bp.toLocaleString()}</td>
+                                    <td>${site.distance_from_origin.toFixed(0)} km</td>
+                                </tr>
+                            `).join('')}
+                        </table>
+                    </div>
+                `;
+            });
+
+            // Add legend
+            const legend = L.control({ position: 'bottomright' });
+            legend.onAdd = function(map) {
+                const div = L.DomUtil.create('div', 'legend');
+                div.innerHTML = '<strong>Cognitive Concepts</strong><br>';
+                Object.entries(conceptColors).forEach(([node, color]) => {
+                    div.innerHTML += `
+                        <div class="legend-item">
+                            <div class="color-box" style="background-color: ${color};"></div>
+                            <span>${node}</span>
+                        </div>
+                    `;
+                });
+                return div;
+            };
+            legend.addTo(map);
+
+            document.getElementById('diffusionResults').innerHTML = resultsHTML;
+        }
+
+        // Main function to run everything
+        function loadAndRenderMap() {
+            const selectedConcept = document.getElementById('conceptSelector').value;
+            const diffusionPatterns = createDiffusionMap(ARCHAEOLOGICAL_DATA);
+            renderDiffusionMap(diffusionPatterns, selectedConcept);
+        }
+
+        // Initialize on load
+        window.onload = loadAndRenderMap;
+    </script>
+</body>
+</html>
