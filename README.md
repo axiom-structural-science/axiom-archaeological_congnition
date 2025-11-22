@@ -37,3 +37,19 @@ axiom-archaeological_congnition/
 
 ---
 *Connecting ancient symbols to modern cognitive science* 🌍🧠
+
+## 🌐 Live Tools & Access
+
+### Interactive Analysis Tools:
+- [Cognitive Dating Tool](https://axiom-structural-science.github.io/axiom-archaeological_cognition/analysis/cognitive_dating_tool.html)
+- [Archaeological Analysis Pipeline](https://axiom-structural-science.github.io/axiom-archaeological_cognition/analysis/archaeological_pipeline.html)
+- [Geographic Pattern Mapper](https://axiom-structural-science.github.io/axiom-archaeological_cognition/analysis/Geographic_Pattern_Mapper.html)
+- [Temporal Gap Analysis](https://axiom-structural-science.github.io/axiom-archaeological_cognition/analysis/Temporal_Gap_Analysis.html)
+- [Concept Co-occurrence Analyzer](https://axiom-structural-science.github.io/axiom-archaeological_cognition/analysis/concept_cooccurrence.html)
+- [Confidence Scoring System](https://axiom-structural-science.github.io/axiom-archaeological_cognition/analysis/confidence_scoring.html)
+
+### Research Documentation:
+- [Methodology](docs/archaeological_methodology.md)
+- [Data Validation Protocol](docs/data_validation_protocol.md)
+- [Global Coverage Assessment](docs/global_coverage_assessment.md)
+- [Peer Review Package](docs/peer_review_package.md)
