@@ -1,0 +1,33 @@
+{
+  "research_metadata": {
+    "title": "AXIOM Archaeological Cognitive Evolution",
+    "total_sites": 45,
+    "timespan_years": 500000,
+    "researcher": "Your Name",
+    "last_updated": "2024"
+  },
+  "primal_concepts": [
+    {
+      "concept": "Initiation",
+      "node": "│",
+      "first_appearance_bp": 500000,
+      "earliest_evidence": {
+        "site": "Bilzingsleben",
+        "country": "Germany", 
+        "evidence": "Parallel Lines (////)",
+        "interpretation": "Systematic mark sequences, likely lunar or food counts"
+      }
+    },
+    {
+      "concept": "Flow", 
+      "node": "⌒",
+      "first_appearance_bp": 400000,
+      "earliest_evidence": {
+        "site": "Trinil",
+        "country": "Indonesia",
+        "evidence": "Curved Line (∩)", 
+        "interpretation": "Indicates arc or route, water/animal tracks"
+      }
+    }
+  ]
+}
