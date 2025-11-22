@@ -1,0 +1,18 @@
+// Identifies which cognitive concepts appear together
+function analyzeConceptClusters(siteData) {
+  const clusters = {};
+  
+  siteData.forEach(site => {
+    const concepts = site.detected_concepts;
+    concepts.forEach((concept, i) => {
+      if (!clusters[concept]) clusters[concept] = {};
+      concepts.forEach((otherConcept, j) => {
+        if (i !== j) {
+          clusters[concept][otherConcept] = (clusters[concept][otherConcept] || 0) + 1;
+        }
+      });
+    });
+  });
+  
+  return clusters;
+}
