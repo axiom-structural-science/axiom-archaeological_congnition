@@ -1,0 +1,20 @@
+// Visualizes concept spread across regions
+function createDiffusionMap(conceptData) {
+  const diffusionPatterns = {};
+  
+  conceptData.forEach(concept => {
+    diffusionPatterns[concept.node] = {
+      origin: concept.earliest_evidence.site,
+      spread_sequence: concept.later_confirmations.map(c => ({
+        site: c.site,
+        bp: c.bp,
+        distance_from_origin: calculateDistance(
+          concept.earliest_evidence.coordinates,
+          getSiteCoordinates(c.site)
+        )
+      })).sort((a, b) => a.bp - b.bp)
+    };
+  });
+  
+  return diffusionPatterns;
+}
