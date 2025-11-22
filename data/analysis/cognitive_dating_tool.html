@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AXIOM Cognitive Dating Tool</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 40px auto; padding: 20px; }
+        .input-section { margin: 20px 0; }
+        textarea { width: 100%; height: 100px; margin: 10px 0; }
+        button { padding: 10px 20px; background: #2c3e50; color: white; border: none; cursor: pointer; }
+        .results { background: #f8f9fa; padding: 20px; margin: 20px 0; border-radius: 8px; }
+    </style>
+</head>
+<body>
+    <h1>🏺 AXIOM Cognitive Dating Tool</h1>
+    <p>Analyze archaeological artifacts by their symbolic concepts to estimate age and cognitive complexity.</p>
+    
+    <div class="input-section">
+        <h3>Describe Archaeological Findings:</h3>
+        <textarea id="artifactInput" placeholder="Example: Found parallel line engravings, shell beads, and charcoal evidence..."></textarea>
+        <button onclick="analyzeFindings()">Analyze Cognitive Age</button>
+    </div>
+
+    <div id="results" class="results" style="display: none;">
+        <h3>📊 Analysis Results</h3>
+        <div id="conceptList"></div>
+        <div id="ageEstimate"></div>
+        <div id="complexityScore"></div>
+    </div>
+
+    <script>
+        const CONCEPT_MAP = {
+            "parallel lines": "│", "straight lines": "│", "tally marks": "│",
+            "curved lines": "⌒", "zigzag": "┘", "wavy": "⌒",
+            "charred": "█", "burnt": "█", "fire evidence": "█",
+            "circle": "—", "enclosure": "—", "boundary": "—",
+            "dots": "⌑", "dot series": "⌑", "multiple points": "⌑",
+            "beads": "⟦⟧", "ornament": "⟦⟧", "adornment": "⟦⟧",
+            "ladder": "≡", "grid": "≡", "comb pattern": "≡"
+        };
+
+        function analyzeFindings() {
+            const input = document.getElementById('artifactInput').value.toLowerCase();
+            const detectedConcepts = [];
+            
+            for (const [keyword, concept] of Object.entries(CONCEPT_MAP)) {
+                if (input.includes(keyword) && !detectedConcepts.includes(concept)) {
+                    detectedConcepts.push(concept);
+                }
+            }
+            
+            displayResults(detectedConcepts);
+        }
+
+        function displayResults(concepts) {
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('conceptList').innerHTML = 
+                `<strong>Detected Concepts:</strong> ${concepts.join(', ') || 'None identified'}`;
+            
+            const era = estimateEra(concepts);
+            document.getElementById('ageEstimate').innerHTML = 
+                `<strong>Estimated Era:</strong> ${era.toLocaleString()} years BP`;
+            
+            const complexity = (concepts.length / 12 * 100).toFixed(1);
+            document.getElementById('complexityScore').innerHTML = 
+                `<strong>Cognitive Complexity:</strong> ${complexity}%`;
+        }
+
+        function estimateEra(concepts) {
+            const conceptAges = {
+                '│': 500000, '⌒': 400000, '┘': 400000, '█': 300000,
+                '—': 300000, '⌑': 250000, '┴': 200000, '┬': 200000,
+                '⟦⟧': 100000, '◆': 100000, '≡': 80000, '⌇': 70000
+            };
+            
+            return Math.max(...concepts.map(c => conceptAges[c] || 0));
+        }
+    </script>
+</body>
+</html>
