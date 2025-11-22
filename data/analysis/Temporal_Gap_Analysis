@@ -1,0 +1,20 @@
+// Identifies periods needing more archaeological evidence
+function analyzeTemporalGaps(conceptData) {
+  const gaps = [];
+  const allDates = conceptData.map(c => c.first_appearance_bp).sort((a, b) => b - a);
+  
+  for (let i = 0; i < allDates.length - 1; i++) {
+    const gap = allDates[i] - allDates[i + 1];
+    if (gap > 50000) { // 50,000 year threshold
+      gaps.push({
+        period: `${allDates[i + 1]} - ${allDates[i]} BP`,
+        duration: gap,
+        concepts_in_gap: conceptData.filter(c => 
+          c.first_appearance_bp < allDates[i] && 
+          c.first_appearance_bp > allDates[i + 1]
+        ).map(c => c.node)
+      });
+    }
+  }
+  return gaps;
+}
