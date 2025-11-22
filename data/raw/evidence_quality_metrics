@@ -1,0 +1,29 @@
+const EVIDENCE_METRICS = {
+  DATING_RELIABILITY: {
+    'Radiocarbon': 0.95,
+    'Thermoluminescence': 0.90,
+    'Stratigraphic': 0.75,
+    'Typological': 0.60
+  },
+  
+  ARTIFACT_QUALITY: {
+    'Multiple identical specimens': 0.95,
+    'Single well-preserved specimen': 0.85,
+    'Fragmentary evidence': 0.65,
+    'Indirect evidence': 0.45
+  },
+  
+  INTERPRETATION_CONSENSUS: {
+    'Universal agreement': 0.95,
+    'Majority view': 0.80,
+    'Multiple competing theories': 0.60,
+    'Highly contested': 0.40
+  },
+  
+  CONTEXTUAL_INTEGRITY: {
+    'In situ with clear association': 0.95,
+    'Secure provenience': 0.80,
+    'General location known': 0.60,
+    'Uncertain context': 0.40
+  }
+};
