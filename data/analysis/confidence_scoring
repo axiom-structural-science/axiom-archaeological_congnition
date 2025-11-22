@@ -1,0 +1,12 @@
+// Quantitative evidence quality assessment
+function calculateConceptConfidence(concept) {
+  const factors = {
+    site_count: Math.min(concept.later_confirmations.length / 5, 1),
+    dating_precision: concept.earliest_evidence.dating_method === 'Radiocarbon' ? 0.9 : 0.7,
+    artifact_quality: concept.earliest_evidence.artifacts[0].confidence_score,
+    interpretation_consensus: 1 - (concept.earliest_evidence.alternative_interpretations.length * 0.1),
+    geographic_distribution: Math.min(concept.temporal_distribution.global_distribution_by / 100000, 1)
+  };
+  
+  return Object.values(factors).reduce((sum, score) => sum + score, 0) / Object.keys(factors).length;
+}
